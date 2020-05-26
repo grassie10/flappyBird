@@ -1,0 +1,11 @@
+# CMake build directories:
+build
+build.*
+builds
+cmake-build-*
+
+# CLion configuration
+.idea/*
+!.idea/codeStyles
+!.idea/inspectionProfiles
+!.idea/misc.xml
