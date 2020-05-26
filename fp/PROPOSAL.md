@@ -28,15 +28,14 @@ the obstacles, then it dies and the game ends. The player can press the space ba
 4. The bird flaps once (moves upward by one constant amount) when the player presses the space bar.
 5. Otherwise, the bird falls at a constant velocity.
 6. Vertical pipes/obstacles have randomly generated gaps of randomly generated sizes (that must be larger than the bird).
-7. Green pipes are stationary. 
-8. Red pipes move vertically while maintaining the same gap size.
-9. If the bird hits the top or bottom of the screen or any of the pipes, then it dies, the screen stops moving, and the 
+7. All pipes are vertically stationary. 
+8. If the bird hits the top or bottom of the screen or any of the pipes, then it dies, the screen stops moving, and the 
 round ends.
-10. If the bird passes through one pipe, then the player gains one point.
-11. Coins may be randomly placed in the center of some pipes' gaps such that if the bird touches the coin, then the coin 
+9. If the bird passes through one pipe, then the player gains one point.
+10. Coins may be randomly placed in the center of some pipes' gaps such that if the bird touches the coin, then the coin 
 disappears and the player gains an extra point.
-12. After the game is over, the player can press enter to replay.
-13. The game will keep track of the high score, and display it after a round ends.
+11. After the game is over, the player can press enter to replay.
+12. The game will keep track of the high score, and display it after a round ends.
 
 ## Open questions
 
