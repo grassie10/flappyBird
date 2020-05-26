@@ -28,8 +28,7 @@ the obstacles, then it dies and the game ends. The player can press the space ba
 4. The bird flaps once (moves upward by one constant amount) when the player presses the space bar.
 5. Otherwise, the bird falls at a constant velocity.
 6. Vertical pipes/obstacles have randomly generated gaps of randomly generated sizes (that must be larger than the bird).
-7. Green pipes are stationary. 
-8. Red pipes move vertically while maintaining the same gap size.
+7. The pipes are vertically stationary.
 9. If the bird hits the top or bottom of the screen or any of the pipes, then it dies, the screen stops moving, and the 
 round ends.
 10. If the bird passes through one pipe, then the player gains one point.
