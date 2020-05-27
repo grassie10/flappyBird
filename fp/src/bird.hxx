@@ -5,7 +5,7 @@
 #include "geometry.hxx"
 #include <ge211.hxx>
 
-// We will represent blocks (the bricks and the paddle) as GE211
+// We will represent columns (the top and bottom parts of an obstacle) as GE211
 // `Rectangle`s. This is a struct that could be defined like so:
 //
 //     struct Rectangle
@@ -15,7 +15,8 @@
 //         int width;
 //         int height;
 //     };
-using Block = ge211::Rectangle;
+using Coin = ge211::Circle;
+using Column = ge211:Rectangle;
 
 // This struct is used to represent the state of the bird. In particular, we
 // need to know how big the ball is (radius_), whether it's moving or
@@ -79,20 +80,18 @@ struct Bird
     //
     // Intersection between a circle and a rectangle is tricky, so we
     // will approximate it with the intersection of two rectangles.
-    bool hits_obstacles(Object const&) const;
-    bool pass_obstacles(Object const&) const;
+    bool hits_obstacles(Column const&) const;
+    bool pass_obstacles(Column const&) const;
     
     // Collision detection between the bird and the coin.
     // If the bird collides with the coin then that coin is removed and
     // the functions returns true.
     // If there is no collision then the function returns false.
-    bool hits_coin(Object const&) const;
+    bool hits_coin(Coin const&) const;
 
-    // Negates the vertical component of this ball's velocity.
-    void reflect_vertical();
+    // Negates the vertical component of this bird's velocity.
+    void boost_vertical();
 
-    // Negates the horizontal component of this ball's velocity.
-    void reflect_horizontal();
 
     ///
     /// MEMBER VARIABLES
