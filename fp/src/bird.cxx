@@ -49,11 +49,11 @@ bool Bird::hits_column(Column const& column) const {
 }
 
 bool Bird::hits_obstacle(Obstacle const& obstacle) const {
-    return (hits_column(obstacle.top) || hits_column(obstacle.bottom))
+    return (hits_column(obstacle.top_pipe()) || hits_column(obstacle.bottom_pipe()))
 }
 
 bool Bird::pass_obstacle(Obstacle const& obstacle) const {
-    return ((center_.x-radius_ > obstacle.top.top_right().x)
+    return ((center_.x-radius_ > obstacle.top_pipe().top_right().x)
     && !hits_obstacle(obstacle));
 }
 bool hits_coin(Coin const& coin) const {
