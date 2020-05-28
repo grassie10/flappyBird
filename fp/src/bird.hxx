@@ -4,22 +4,12 @@
 
 #include "geometry.hxx"
 #include <ge211.hxx>
+#include "obstacle.hxx"
+#include "coin.hxx"
 
-// We will represent columns (the top and bottom parts of an obstacle) as GE211
-// `Rectangle`s. This is a struct that could be defined like so:
-//
-//     struct Rectangle
-//     {
-//         int x;  // x coordinate of left side
-//         int y;  // y coordinate of top
-//         int width;
-//         int height;
-//     };
-using Coin = ge211::Circle;
-using Column = ge211:Rectangle;
-
+using Column = ge211::Rectangle;
 // This struct is used to represent the state of the bird. In particular, we
-// need to know how big the ball is (radius_), whether it's moving or
+// need to know how big the bird is (radius_), whether it's moving or
 // stopped (live_), where it is (center_), and where it's going (velocity_).
 //
 // `velocity_` is a ge211::Dimensions, which means it has two
@@ -45,8 +35,8 @@ struct Bird
     // this can also be used to reset the bird by creating a new bird to
     // assign over it:
     //
-    //     bird_ = Bird(screen_, geometry_);
-    Ball(Block const& screen, Geometry const&);
+    //     bird_ = Bird(geometry_);
+    Bird(Geometry const&);
 
     ///
     /// MEMBER FUNCTIONS
@@ -71,7 +61,7 @@ struct Bird
     Bird next() const;
 
     // These functions all perform collision detection by telling us whether
-    // this ball is *past* the given edge.
+    // this bird is *past* the given edge.
     bool hits_top(Geometry const&) const;
     bool hits_bottom(Geometry const&) const;
 
@@ -80,8 +70,9 @@ struct Bird
     //
     // Intersection between a circle and a rectangle is tricky, so we
     // will approximate it with the intersection of two rectangles.
-    bool hits_obstacles(Column const&) const;
-    bool pass_obstacles(Column const&) const;
+    bool hits_column(Column const&) const;
+    bool hits_obstacle(Obstacle const&) const;
+    bool pass_obstacle(Obstacle const&) const;
     
     // Collision detection between the bird and the coin.
     // If the bird collides with the coin then that coin is removed and
@@ -90,7 +81,7 @@ struct Bird
     bool hits_coin(Coin const&) const;
 
     // Negates the vertical component of this bird's velocity.
-    void boost_vertical();
+    void boost_vertical(int boost);
 
 
     ///
