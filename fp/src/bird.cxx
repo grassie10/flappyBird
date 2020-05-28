@@ -5,7 +5,7 @@
 // starting stage
 static ge211::Position start_pos(Geometry const& geometry)
 {
-    int x = 20;
+    int x = geometry.side_margin;
     int y = geometry.scene_dims.height/2;
     return {x, y};
 }
@@ -64,7 +64,7 @@ bool hits_coin(Coin const& coin) const {
 }
 
 void boost_vertical(int boost) {
-    velocity_.height += boost;
+    center_.y += boost;
 }
 
 bool operator==(Bird const& b1, Bird const& b2)
