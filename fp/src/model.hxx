@@ -9,9 +9,6 @@
 // Each obstacle has the same width
 const int obstacle_width;
 
-// The vertical velocities of the top and bottom pipes for a moving obstacle
-const ge211::Dimensions moving_obstacle_velocity;
-
 // The vertical position boost that a bird gets when the player presses the space bar
 const int bird_boost;
 
@@ -20,32 +17,6 @@ const ge211::Dimensions bird_velocity;
 
 // The dimensions of the screen
 const ge211::Dimensions scene_dims;
-
-//
-// Model classes:
-//
-
-//Each vertical column, including the top and bottom pipes and the gap in between
-struct Obstacle
-{
-    // Rectangle representing the top pipe
-    ge211::Rectangle top_pipe;
-
-    // Rectangle representing the bottom pipe
-    ge211::Rectangle bottom_pipe;
-
-    // Height of the gap size in between the top and bottom pipes
-    int gap_size;
-
-    // Whether there will be a coin in the gap
-    bool has_coin;
-
-    // The color of both of the pipes
-    ge211::Color obstacle_color;
-
-    // Whether or not the pipes will move vertically
-    bool movable;
-};
 
 // The whole state of the game
 class Model {
