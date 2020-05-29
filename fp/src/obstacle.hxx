@@ -1,8 +1,11 @@
 #pragma once
 
 #include <ge211.hxx>
+#include "geometry.hxx"
+#include "bird.hxx"
 
-extern int const horizontal_velocity, width;
+int const horizontal_velocity = 10;
+int const col_width = 20;
 
 using Column = ge211::Rectangle;
 
@@ -32,9 +35,10 @@ public:
     // The widths of both pipes for every obstacle is constant, but the heights of each pipe are
     // determined randomly. Whether or not there will be a coin in the middle of the pipes is also
     // determined randomly.
-    // Takes in a ge211::Random& object that will be used to randomize the pipes and coin.
+    // Takes in a reference to a ge211::Random object that will be used to randomize the pipes and
+    // coin, and a reference to a Geometry object that provides the dimensions of the scene.
 
-    Obstacle(ge211::Random& rng);
+    Obstacle(ge211::Random& rng, Geometry const&, Bird const&);
 
     ///
     /// MEMBER FUNCTIONS

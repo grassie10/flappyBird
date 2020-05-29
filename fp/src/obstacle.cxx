@@ -1,19 +1,25 @@
 #include "obstacle.hxx"
+#include "geometry.hxx"
+#include "bird.hxx"
 
-int const horizontal_velocity = 10;
-int const width = 10;
-
-Obstacle::Obstacle(ge211::Random& rng)
+Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry, Bird const& bird)
 {
-    int r = rng.between(1, 100); //replace end bound with scene dims height
-    //replace x with scene dims width
-    top_pipe_ = Column::from_top_left({100,0}, {width, r});
+    // Make sure that the gap between the pipes is big enough for the bird
+    int diff = 0;
+    int top_height = 0;
+    int bottom_height = 0;
+    while (diff < bird.radius_ + 10) {
+        top_height = rng.between(1, geometry.scene_dims.height);
+        bottom_height = rng.between(1, geometry.scene_dims.height - top_height);
+        diff = (geometry.scene_dims.height - bottom_height) - top_height;
+    }
+    // Initialize the top and bottom pipes
+    top_pipe_ = Column::from_top_left({geometry.scene_dims.width, 0}, {col_width, top_height});
+    bottom_pipe_ = Column::from_bottom_left({geometry.scene_dims.width, geometry.scene_dims.height},
+                                            {col_width, bottom_height});
 
-    r = rng.between(1, 100 - r);
-    //replace x and y with scene dims width and height
-    top_pipe_ = Column::from_bottom_left({100,100}, {width, r});
-
-    r = rng.between(0, 100);
+    // Randomly determine if this obstacle should contain a coin
+    int r = rng.between(0, 100);
     if (r < 30) {
         has_coin_ = true;
     } else {
@@ -42,5 +48,8 @@ bool Obstacle::has_coin() const
 // Returns a new Obstacle but whose position has been updated by its velocity
 Obstacle Obstacle::next()
 {
-
+    Obstacle result(*this);
+    result.top_pipe_.x -= horizontal_velocity;
+    result.bottom_pipe_.x -= horizontal_velocity;
+    return result;
 }
