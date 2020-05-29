@@ -5,6 +5,8 @@ include(.cs211/cmake/CMakeLists.txt)
 # TODO: PUT ADDITIONAL MODEL .cxx FILES IN THIS LIST:
 set(MODEL_SRC
         src/model.cxx
+        src/geometry.cxx
+        src/bird.cxx
         src/obstacle.cxx
         src/coin.cxx)
 

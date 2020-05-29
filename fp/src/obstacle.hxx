@@ -5,7 +5,6 @@
 #include "bird.hxx"
 
 int const horizontal_velocity = 10;
-int const col_width = 20;
 
 using Column = ge211::Rectangle;
 
@@ -23,6 +22,12 @@ class Obstacle
 
     // Whether there will be a coin in the gap
     bool has_coin_;
+
+    // Width of the pipes in the obstacle
+    int width_;
+
+    // Velocity of the obstacle
+    ge211::Dimensions velocity_;
 
 public:
 
@@ -52,6 +57,12 @@ public:
 
     // Returns has_coin_
     bool has_coin() const;
+
+    // Returns width_
+    int width() const;
+
+    // Returns velocity_
+    ge211::Dimensions velocity() const;
 
     // Returns a new Obstacle but whose position has been updated by its velocity
     Obstacle next();

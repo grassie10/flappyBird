@@ -12,8 +12,8 @@ static ge211::Position start_pos(Geometry const& geometry)
 
 // It won't compile without this, so you get it for free.
 Bird::Bird(Geometry const& geometry)
-        : radius_   (geometry.ball_radius)
-        , velocity_ (geometry.ball_velocity0)
+        : radius_   (geometry.bird_radius)
+        , velocity_ (geometry.bird_velocity0)
         , center_   (start_pos(geometry))
         , live_     (false)
 { }
@@ -36,7 +36,7 @@ bool Bird::hits_top(Geometry const&) const
 
 Bird Bird::next() const
 {
-    Ball result(*this);
+    Bird result(*this);
     result.center_ += result.velocity_;
     return result;
 }
@@ -56,15 +56,15 @@ bool Bird::pass_obstacle(Obstacle const& obstacle) const {
     return ((center_.x-radius_ > obstacle.top_pipe().top_right().x)
     && !hits_obstacle(obstacle));
 }
-bool hits_coin(Coin const& coin) const {
+bool Bird::hits_coin(Coin const& coin) const {
     return ((center_.x+radius_ > coin.top_left().x &&
              coin.top_right().x >center_.x-radius_) &&
             (center_.y+radius_ > coin.top_left().y &&
-             coin.bottom_left().y > center_.y-radius_))
+             coin.bottom_left().y > center_.y-radius_));
 }
 
-void boost_vertical(int boost) {
-    center_.y += boost;
+void Bird::boost_vertical(int boost) {
+    center_.y -= boost;
 }
 
 bool operator==(Bird const& b1, Bird const& b2)

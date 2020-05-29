@@ -28,5 +28,11 @@ struct Geometry
     // velocity component:
     int bird_boost;
 
+    // The width of the obstacle columns
+    int obstacle_width;
+
+    // The radius of the coin
+    int coin_radius;
+
 };
 
