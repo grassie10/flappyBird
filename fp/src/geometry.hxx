@@ -12,7 +12,7 @@ struct Geometry
     // The dimensions of the whole window:
     ge211::Dimensions scene_dims;
 
-    // Number of pixels from sides of screen to bird's starting point:
+    // Number of pixels from sides of screen to bird and obstacle's starting point:
     int side_margin;
 
     // The radius of the bird:
@@ -30,6 +30,9 @@ struct Geometry
 
     // The width of the obstacle columns
     int obstacle_width;
+
+    // Spacing between each obstacle
+    int obstacle_spacing;
 
     // The radius of the coin
     int coin_radius;
