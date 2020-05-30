@@ -29,7 +29,7 @@ public:
     /// CONSTRUCTOR
     ///
 
-    // Constructs a new coin that is centered in the gap between
+    // Constructs a new coin that is centered in the gap between the two pipes in an Obstacle
     Coin(Obstacle const&, Geometry const&);
 
     ///
