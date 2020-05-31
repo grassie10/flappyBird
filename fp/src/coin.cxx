@@ -1,10 +1,8 @@
 #include "coin.hxx"
 #include "geometry.hxx"
-#include "obstacle.hxx"
 
-Coin::Coin(Obstacle const& obstacle, Geometry const& geometry)
-        : center_ (ge211::Position {obstacle.top_pipe().center().x,
-                                    (obstacle.top_pipe().bottom_left().y + obstacle.bottom_pipe().top_left().y) / 2})
+Coin::Coin(ge211::Position center, Geometry const& geometry)
+        : center_ (center)
         , radius_ (geometry.coin_radius)
         , velocity_ (geometry.background_velocity)
         , collected_ (false)

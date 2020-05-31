@@ -3,8 +3,7 @@
 #include <ge211.hxx>
 #include "geometry.hxx"
 #include "bird.hxx"
-
-int const horizontal_velocity = 10;
+#include "coin.hxx"
 
 using Column = ge211::Rectangle;
 
@@ -22,6 +21,9 @@ class Obstacle
 
     // Whether there will be a coin in the gap
     bool has_coin_;
+
+    // Coin object in gap between top and bottom pipes. Only accessed if has_coin_ is true
+    Coin coin_;
 
     // Width of the pipes in the obstacle
     int width_;
@@ -58,11 +60,18 @@ public:
     // Returns has_coin_
     bool has_coin() const;
 
+    // Returns coin_.
+    // PRECONDITION: has_coin_ is true
+    Coin coin() const;
+
     // Returns width_
     int width() const;
 
     // Returns velocity_
     ge211::Dimensions velocity() const;
+
+    // Sets the position of the top and bottom pipes via x-coordinate
+    void set_position(int x);
 
     // Returns a new Obstacle but whose position has been updated by its velocity
     Obstacle next();

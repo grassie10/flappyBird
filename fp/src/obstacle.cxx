@@ -1,10 +1,14 @@
 #include "obstacle.hxx"
 #include "geometry.hxx"
 #include "bird.hxx"
+#include "coin.hxx"
 
 Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry, Bird const& bird)
             : width_ (geometry.obstacle_width)
             , velocity_ (geometry.background_velocity)
+            , coin_ (ge211::Position {top_pipe_.center().x,
+                                      (top_pipe_.bottom_left().y + bottom_pipe_.top_left().y) / 2},
+                     geometry)
 {
     // Make sure that the gap between the pipes is big enough for the bird
     int diff = 0;
@@ -47,6 +51,13 @@ bool Obstacle::has_coin() const
     return has_coin_;
 }
 
+// Returns coin_.
+// PRECONDITION: has_coin_ is true
+Coin Obstacle::coin() const
+{
+    return coin_;
+}
+
 // Returns width_
 int Obstacle::width() const
 {
@@ -57,6 +68,13 @@ int Obstacle::width() const
 ge211::Dimensions Obstacle::velocity() const
 {
     return velocity_;
+}
+
+// Sets the position of the top and bottom pipes via x-coordinate
+void Obstacle::set_position(int x)
+{
+    top_pipe_.x = x;
+    bottom_pipe_.x = x;
 }
 
 // Returns a new Obstacle but whose position has been updated by its velocity

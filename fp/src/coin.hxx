@@ -2,7 +2,6 @@
 
 #include <ge211.hxx>
 #include "geometry.hxx"
-#include "obstacle.hxx"
 
 class Coin
 {
@@ -30,7 +29,7 @@ public:
     ///
 
     // Constructs a new coin that is centered in the gap between the two pipes in an Obstacle
-    Coin(Obstacle const&, Geometry const&);
+    Coin(ge211::Position center, Geometry const&);
 
     ///
     /// PUBLIC MEMBER FUNCTIONS
