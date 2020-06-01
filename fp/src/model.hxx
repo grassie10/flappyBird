@@ -19,9 +19,6 @@ class Model {
     /// PRIVATE DATA MEMBERS
     ///
 
-    // The geometry parameters of the model
-    Geometry const geometry_;
-
     // The state of the bird
     Bird bird_;
 
@@ -43,6 +40,13 @@ public:
     ///
 
     explicit Model(Geometry const& geometry = Geometry());
+
+    ///
+    /// PUBLIC DATA MEMBERS
+    ///
+
+    // The geometry parameters of the model
+    Geometry const geometry_;
 
     ///
     /// PUBLIC FUNCTIONS
