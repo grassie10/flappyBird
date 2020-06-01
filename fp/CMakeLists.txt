@@ -14,6 +14,7 @@ set(MODEL_SRC
 add_program(main
         src/main.cxx
         src/view.cxx
+        src/controller.cxx
         ${MODEL_SRC})
 target_link_libraries(main ge211)
 
