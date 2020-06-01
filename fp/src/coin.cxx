@@ -55,11 +55,3 @@ ge211::Position Coin::bottom_right() const
 {
     return {center_.x + radius_, center_.y + radius_};
 }
-
-// Returns a new Coin but whose position has been updated by its velocity
-Coin Coin::next()
-{
-    Coin result(*this);
-    result.center_.x -= velocity_.width;
-    return result;
-}

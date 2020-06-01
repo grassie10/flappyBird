@@ -9,9 +9,6 @@ class Coin
     /// PRIVATE MEMBER VARIABLES
     ///
 
-    // Center of the coin
-    ge211::Position center_;
-
     // Radius of the coin
     int radius_;
 
@@ -30,6 +27,13 @@ public:
 
     // Constructs a new coin that is centered in the gap between the two pipes in an Obstacle
     Coin(ge211::Position center, Geometry const&);
+
+    ///
+    /// PUBLIC DATA MEMBERS
+    ///
+
+    // Center of the coin
+    ge211::Position center_;
 
     ///
     /// PUBLIC MEMBER FUNCTIONS
@@ -59,6 +63,4 @@ public:
     // Returns the position of the bottom right of the coin's bounding box
     ge211::Position bottom_right() const;
 
-    // Returns a new Coin but whose position has been updated by its velocity
-    Coin next();
 };

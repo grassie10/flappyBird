@@ -16,6 +16,11 @@ void Controller::on_key(ge211::Key key)
     }
 }
 
+void Controller::on_frame(double dt)
+{
+    model_.update();
+}
+
 void Controller::draw(ge211::Sprite_set& sprites)
 {
     view_.draw(sprites);

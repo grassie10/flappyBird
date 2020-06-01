@@ -4,13 +4,16 @@
 #include "model.hxx"
 #include <string>
 
+extern ge211::Color const background_color, bird_color, coin_color, obstacle_color;
+extern ge211::Font const sans30;
+
 class View
 {
     ///
     /// PRIVATE MEMBER VARIABLES
     ///
 
-    Model const& model_;
+    Model& model_;
 
     ge211::Rectangle_sprite background_;
     ge211::Circle_sprite bird_sprite_;
@@ -23,7 +26,7 @@ public:
     /// CONSTRUCTOR
     ///
 
-    explicit View(Model const&);
+    explicit View(Model&);
 
     ///
     /// MEMBER FUNCTIONS

@@ -24,8 +24,8 @@ protected:
     ///
     /// Overridden member functions
     ///
-
     void on_key(ge211::Key key) override;
+    void on_frame(double dt) override;
 
     // Delegated to view
     void draw(ge211::Sprite_set&) override;
