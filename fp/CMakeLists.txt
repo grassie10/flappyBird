@@ -12,8 +12,10 @@ set(MODEL_SRC
 
 # TODO: PUT ADDITIONAL NON-MODEL (UI) .cxx FILES IN THIS LIST:
 add_program(main
-    src/main.cxx
-    ${MODEL_SRC})
+        src/main.cxx
+        src/view.cxx
+        src/controller.cxx
+        ${MODEL_SRC})
 target_link_libraries(main ge211)
 
 add_test_program(model_test

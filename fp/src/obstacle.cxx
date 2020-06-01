@@ -14,8 +14,8 @@ Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry)
     int top_height = 0;
     int bottom_height = 0;
     while (diff < geometry.bird_radius + 10) {
-        top_height = rng.between(1, geometry.scene_dims.height);
-        bottom_height = rng.between(1, geometry.scene_dims.height - top_height);
+        int top_height = rng.between(1, geometry.scene_dims.height);
+        int bottom_height = rng.between(1, geometry.scene_dims.height - top_height);
         diff = (geometry.scene_dims.height - bottom_height) - top_height;
     }
     // Initialize the top and bottom pipes
@@ -82,5 +82,6 @@ Obstacle Obstacle::next()
     Obstacle result(*this);
     result.top_pipe_.x -= velocity_.width;
     result.bottom_pipe_.x -= velocity_.width;
+    result.coin_.center_.x -= velocity_.width;
     return result;
 }

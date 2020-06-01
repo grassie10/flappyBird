@@ -7,7 +7,8 @@
 #include "obstacle.hxx"
 
 // The whole state of the game
-class Model {
+class Model
+{
     ///
     /// STATIC DATA MEMBERS
     ///
@@ -19,17 +20,11 @@ class Model {
     /// PRIVATE DATA MEMBERS
     ///
 
-    // The geometry parameters of the model
-    Geometry const geometry_;
-
     // The state of the bird
     Bird bird_;
 
     // The constantly changing vector of obstacles on the screen
     std::vector<Obstacle> obstacles_;
-
-    // The constantly changing vector of coins on the screen
-    std::vector<Coin> coins_;
 
     // Whether the game is still ongoing
     bool game_end_;
@@ -42,7 +37,16 @@ public:
     /// CONSTRUCTOR
     ///
 
+    //explicit Model(Geometry const& geometry = Geometry(), ge211::Random& my_rng = ge211::Abstract_game::get_random());
+    //explicit Model(Geometry const& geometry, ge211::Random& my_rng);
     explicit Model(Geometry const& geometry = Geometry());
+
+    ///
+    /// PUBLIC DATA MEMBERS
+    ///
+
+    // The geometry parameters of the model
+    Geometry const geometry_;
 
     ///
     /// PUBLIC FUNCTIONS
@@ -74,9 +78,6 @@ public:
 
     // Returns the vector of existing obstacles
     std::vector<Obstacle> obstacles() const;
-
-    // Returns the vector of existing coins
-    std::vector<Coin> coins() const;
 
 private:
     ///

@@ -21,9 +21,6 @@ class Obstacle
     // Whether there will be a coin in the gap
     bool has_coin_;
 
-    // Coin object in gap between top and bottom pipes. Only accessed if has_coin_ is true
-    Coin coin_;
-
     // Width of the pipes in the obstacle
     int width_;
 
@@ -45,6 +42,13 @@ public:
     // coin, and a reference to a Geometry object that provides the dimensions of the scene.
 
     Obstacle(ge211::Random& rng, Geometry const&);
+
+    ///
+    /// PUBLIC DATA MEMBERS
+    ///
+
+    // Coin object in gap between top and bottom pipes. Only accessed if has_coin_ is true
+    Coin coin_;
 
     ///
     /// MEMBER FUNCTIONS

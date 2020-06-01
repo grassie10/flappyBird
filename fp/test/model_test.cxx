@@ -1,8 +1,6 @@
 #include "model.hxx"
 #include <catch.hxx>
-//
-// TODO: Write preliminary model tests.
-//
+
 // These tests should demonstrate at least six of the functional
 // requirements.
 //

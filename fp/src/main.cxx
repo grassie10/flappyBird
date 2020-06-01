@@ -1,6 +1,9 @@
-#include "model.hxx"
+#include "controller.hxx"
 
 int main()
 {
-    // TODO
+    Model model;
+    Controller controller(model);
+
+    controller.run();
 }

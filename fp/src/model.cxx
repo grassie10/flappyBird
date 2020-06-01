@@ -11,55 +11,69 @@ Model::Model(Geometry const& geometry)
     , bird_(geometry)
     , game_end_(true)
     , score_(0)
-
 {
-    ge211::Random& rng = ge211::Abstract_game::get_random();
-    //obstacles and coins
-    while (!game_end_){
-        Obstacle new_obstacle(rng, geometry);
-        new_obstacle.set_position(geometry.scene_dims.width-geometry.obstacle_width);
-        obstacles_.push_back(new_obstacle);
-        if (new_obstacle.has_coin()){
-            coins_.push_back(new_obstacle.coin());
-        }
-    }
-
+    ge211::Random& my_rng = ge211::Abstract_game::get_random();
+    //initialize one obstacle at beginning of game
+    Obstacle new_obstacle(my_rng, geometry);
+    new_obstacle.set_position(geometry.scene_dims.width - geometry.obstacle_width);
+    obstacles_.push_back(new_obstacle);
 }
 
 void Model::update()
 {
     if (bird_.live_){
         game_end_ = false;
-        for (Obstacle& o: obstacles_){
+        Bird next_bird = bird_.next();
+
+        for (Obstacle& o: obstacles_) {
             Obstacle new_o = o.next();
-            if (o.has_coin()){
-                Coin c = o.coin();
-            }
-            Coin c = o.coin();
-            if (bird_.hits_obstacle(new_o)){
+
+            // check if the bird dies
+            if (next_bird.hits_obstacle(new_o)
+                || next_bird.hits_top(geometry_)
+                || next_bird.hits_bottom(geometry_)) {
                 bird_.live_ = false;
                 game_end_ = true;
                 if (score_ > high_score){
                     high_score = score_;
                 }
                 return;
-            }else if (bird_.pass_obstacle(new_o)) {
-                std::swap(o, obstacles_.back());
-                obstacles_.pop_back();
-                score_ += 1;
-                if (bird_.hits_coin(c)){
-                    score_ +=1;
-                }
-                o = o.next();
-                return;
             }
+
+            // check if the bird passes an obstacle
+            if (bird_.pass_obstacle(new_o)) {
+                score_ += 1;
+            }
+
+            // separately check if the bird hits the coin
+            if (o.has_coin()) {
+                Coin next_coin = new_o.coin();
+                if (!next_coin.is_collected() && bird_.hits_coin(next_coin)) {
+                    score_ += 1;
+                    o.coin_.collect();
+                }
+            }
+
+            // update the obstacle
+            o = o.next();
         }
-    }else{
-        game_end_ = true;
-        if (score_ > high_score){
-            high_score = score_;
+
+        // update vector of obstacles
+        // check if first obstacle has moved off of the left side of the screen
+        if (obstacles_[0].top_pipe().top_right().x < 0) {
+            obstacles_.erase(obstacles_.begin());
         }
-        return;
+        // add any obstacle that comes into the right of the screen
+        if (geometry_.scene_dims.width - obstacles_[obstacles_.size() - 1].top_pipe().top_right().x
+            >= geometry_.obstacle_spacing) {
+            ge211::Random& my_rng = ge211::Abstract_game::get_random();
+            Obstacle new_obstacle(my_rng, geometry_);
+            new_obstacle.set_position(geometry_.scene_dims.width);
+            obstacles_.push_back(new_obstacle);
+        }
+
+        // update the bird
+        bird_ = bird_.next();
     }
 }
 
@@ -81,8 +95,14 @@ void Model::start()
 {
     bird_.live_ = true;
     score_ = 0;
-    obstacles_ = Model::obstacles_;
-    coins_ = Model::coins_;
+    game_end_ = false;
+
+    // clear and reinitialize obstacles_
+    obstacles_.clear();
+    ge211::Random& my_rng = ge211::Abstract_game::get_random();
+    Obstacle new_obstacle(my_rng, geometry_);
+    new_obstacle.set_position(geometry_.scene_dims.width - geometry_.obstacle_width);
+    obstacles_.push_back(new_obstacle);
 }
 
 // Returns game_end_
@@ -101,10 +121,4 @@ Bird Model::bird() const
 std::vector<Obstacle> Model::obstacles() const
 {
     return obstacles_;
-}
-
-// Returns the vector of existing coins
-std::vector<Coin> Model::coins() const
-{
-    return coins_;
 }
