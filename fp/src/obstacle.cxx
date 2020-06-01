@@ -1,9 +1,8 @@
 #include "obstacle.hxx"
 #include "geometry.hxx"
-#include "bird.hxx"
 #include "coin.hxx"
 
-Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry, Bird const& bird)
+Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry)
             : width_ (geometry.obstacle_width)
             , velocity_ (geometry.background_velocity)
             , coin_ (ge211::Position {top_pipe_.center().x,
@@ -14,7 +13,7 @@ Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry, Bird const& bir
     int diff = 0;
     int top_height = 0;
     int bottom_height = 0;
-    while (diff < bird.radius_ + 10) {
+    while (diff < geometry.bird_radius + 10) {
         top_height = rng.between(1, geometry.scene_dims.height);
         bottom_height = rng.between(1, geometry.scene_dims.height - top_height);
         diff = (geometry.scene_dims.height - bottom_height) - top_height;

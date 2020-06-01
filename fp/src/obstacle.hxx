@@ -2,7 +2,6 @@
 
 #include <ge211.hxx>
 #include "geometry.hxx"
-#include "bird.hxx"
 #include "coin.hxx"
 
 using Column = ge211::Rectangle;
@@ -45,7 +44,7 @@ public:
     // Takes in a reference to a ge211::Random object that will be used to randomize the pipes and
     // coin, and a reference to a Geometry object that provides the dimensions of the scene.
 
-    Obstacle(ge211::Random& rng, Geometry const&, Bird const&);
+    Obstacle(ge211::Random& rng, Geometry const&);
 
     ///
     /// MEMBER FUNCTIONS
