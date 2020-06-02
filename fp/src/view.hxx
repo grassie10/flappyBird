@@ -5,7 +5,7 @@
 #include <string>
 
 extern ge211::Color const background_color, bird_color, coin_color, obstacle_color;
-extern ge211::Font const sans30;
+//extern ge211::Font const sans30;
 
 class View
 {
@@ -19,6 +19,9 @@ class View
     ge211::Circle_sprite bird_sprite_;
     ge211::Circle_sprite coin_sprite_;
     //sprites for obstacles will be created in view.cxx
+
+    // The font for displaying the score at the end of a round
+    ge211::Font sans30{"sans.ttf", 30};
 
 public:
 

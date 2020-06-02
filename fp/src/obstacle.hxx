@@ -40,8 +40,11 @@ public:
     // determined randomly.
     // Takes in a reference to a ge211::Random object that will be used to randomize the pipes and
     // coin, and a reference to a Geometry object that provides the dimensions of the scene.
-
     Obstacle(ge211::Random& rng, Geometry const&);
+
+    // Constructor for Obstacle strictly for testing purposes.
+    // Controls the heights of the pipes and whether the obstacle has a coin.
+    Obstacle(Geometry const&, int top_height, int bottom_height, bool with_coin);
 
     ///
     /// PUBLIC DATA MEMBERS

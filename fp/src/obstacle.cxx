@@ -13,7 +13,7 @@ Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry)
     int diff = 0;
     int top_height = 0;
     int bottom_height = 0;
-    while (diff < geometry.bird_radius + 10) {
+    while (diff < (2*geometry.bird_radius) + 20) {
         int top_height = rng.between(1, geometry.scene_dims.height);
         int bottom_height = rng.between(1, geometry.scene_dims.height - top_height);
         diff = (geometry.scene_dims.height - bottom_height) - top_height;
@@ -30,6 +30,19 @@ Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry)
     } else {
         has_coin_ = false;
     }
+}
+
+Obstacle::Obstacle(Geometry const& geometry, int top_height, int bottom_height, bool with_coin)
+        : width_ (geometry.obstacle_width)
+        , velocity_ (geometry.background_velocity)
+        , coin_ (ge211::Position {top_pipe_.center().x,
+                                  (top_pipe_.bottom_left().y + bottom_pipe_.top_left().y) / 2},
+                 geometry)
+        , has_coin_ (with_coin)
+{
+    top_pipe_ = Column::from_top_left({geometry.scene_dims.width, 0}, {width_, top_height});
+    bottom_pipe_ = Column::from_bottom_left({geometry.scene_dims.width, geometry.scene_dims.height - bottom_height},
+                                            {width_, bottom_height});
 }
 
 // Returns top_pipe_

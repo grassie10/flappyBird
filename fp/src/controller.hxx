@@ -18,7 +18,8 @@ public:
     /// CONSTRUCTOR
     ///
 
-    explicit Controller(Model&);
+    //explicit Controller(Model&);
+    explicit Controller(Geometry const& geometry = Geometry());
 
 protected:
     ///

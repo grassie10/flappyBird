@@ -1,8 +1,8 @@
 #include "controller.hxx"
 
-Controller::Controller(Model& model)
-            : model_(model)
-            , view_(model)
+Controller::Controller(Geometry const& geometry)
+            : model_(geometry, get_random())
+            , view_(model_)
 { }
 
 void Controller::on_key(ge211::Key key)

@@ -2,8 +2,7 @@
 
 int main()
 {
-    Model model;
-    Controller controller(model);
+    Controller controller;
 
     controller.run();
 }
