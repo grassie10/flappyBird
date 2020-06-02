@@ -5,7 +5,6 @@
 #include <string>
 
 extern ge211::Color const background_color, bird_color, coin_color, obstacle_color;
-//extern ge211::Font const sans30;
 
 class View
 {

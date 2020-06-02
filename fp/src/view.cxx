@@ -5,7 +5,6 @@ ge211::Color const background_color {135, 206, 235};
 ge211::Color const bird_color {255, 0, 0};
 ge211::Color const coin_color {212, 175, 55};
 ge211::Color const obstacle_color {0, 153, 0};
-ge211::Font const sans30 {"sans.ttf", 30};
 
 View::View(Model& model)
         : model_(model)

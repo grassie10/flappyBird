@@ -3,7 +3,11 @@
 
 // These tests should demonstrate at least six of the functional
 // requirements.
-//
+
+struct Random_test_access
+{
+    ge211::Random rnd;
+};
 
 struct Test_access
 {
@@ -67,7 +71,9 @@ TEST_CASE("bird hits obstacle")
 */
 TEST_CASE("collect coin")
 {
-    Model m(Geometry const& geometry = Geometry(), ge211::Random& my_rng = ge211::Abstract_game::get_random());
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
     Test_access t{m};
     m.start();
     t.obstacles().clear();
