@@ -6,15 +6,16 @@
 
 int Model::high_score = 0;
 
-Model::Model(Geometry const& geometry)
+Model::Model(Geometry const& geometry, ge211::Random& my_rng)
     : geometry_(geometry)
+    , random_(my_rng)
     , bird_(geometry)
     , game_end_(true)
     , score_(0)
 {
-    ge211::Random& my_rng = ge211::Abstract_game::get_random();
+    //ge211::Random& my_rng = ge211::Abstract_game::get_random();
     //initialize one obstacle at beginning of game
-    Obstacle new_obstacle(my_rng, geometry);
+    Obstacle new_obstacle(random_, geometry);
     new_obstacle.set_position(geometry.scene_dims.width - geometry.obstacle_width);
     obstacles_.push_back(new_obstacle);
 }
@@ -41,14 +42,14 @@ void Model::update()
             }
 
             // check if the bird passes an obstacle
-            if (bird_.pass_obstacle(new_o)) {
+            if (next_bird.pass_obstacle(new_o)) {
                 score_ += 1;
             }
 
             // separately check if the bird hits the coin
             if (o.has_coin()) {
                 Coin next_coin = new_o.coin();
-                if (!next_coin.is_collected() && bird_.hits_coin(next_coin)) {
+                if (!next_coin.is_collected() && next_bird.hits_coin(next_coin)) {
                     score_ += 1;
                     o.coin_.collect();
                 }
@@ -66,8 +67,8 @@ void Model::update()
         // add any obstacle that comes into the right of the screen
         if (geometry_.scene_dims.width - obstacles_[obstacles_.size() - 1].top_pipe().top_right().x
             >= geometry_.obstacle_spacing) {
-            ge211::Random& my_rng = ge211::Abstract_game::get_random();
-            Obstacle new_obstacle(my_rng, geometry_);
+            //ge211::Random& my_rng = ge211::Abstract_game::get_random();
+            Obstacle new_obstacle(random_, geometry_);
             new_obstacle.set_position(geometry_.scene_dims.width);
             obstacles_.push_back(new_obstacle);
         }
@@ -99,8 +100,8 @@ void Model::start()
 
     // clear and reinitialize obstacles_
     obstacles_.clear();
-    ge211::Random& my_rng = ge211::Abstract_game::get_random();
-    Obstacle new_obstacle(my_rng, geometry_);
+    //ge211::Random& my_rng = ge211::Abstract_game::get_random();
+    Obstacle new_obstacle(random_, geometry_);
     new_obstacle.set_position(geometry_.scene_dims.width - geometry_.obstacle_width);
     obstacles_.push_back(new_obstacle);
 }

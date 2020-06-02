@@ -5,6 +5,21 @@
 // requirements.
 //
 
+struct Test_access
+{
+    Model& m_;
+
+    Bird& bird()
+    {
+        return m_.bird_;
+    }
+
+    std::vector<Obstacle>& obstacles()
+    {
+        return m_.obstacles_;
+    }
+};
+/*
 TEST_CASE("bird hits top")
 {
     Model m;
@@ -49,25 +64,68 @@ TEST_CASE("bird hits obstacle")
     m.update();
     CHECK_FALSE( m.bird_alive_ );
 }
-
+*/
 TEST_CASE("collect coin")
 {
-    Model m;
-    m.bird_alive_ = true;
-    m.obstacles_.clear();
-    m.coin_ = ge211::Position {100, 100};
+    Model m(Geometry const& geometry = Geometry(), ge211::Random& my_rng = ge211::Abstract_game::get_random());
+    Test_access t{m};
+    m.start();
+    t.obstacles().clear();
+    Obstacle new_ob(m.geometry_, 100, 200, true);
+    new_ob.set_position(100);
+    t.obstacles().push_back(new_ob);
 
-    m.bird_ = ge211::Position {50, 50};
+    CHECK( m.get_score() == 0 );
+    CHECK( t.obstacles().size() == 1 );
+    // check coin has correct position
+    CHECK( t.obstacles()[0].coin_.center_ == ge211::Position{110, 300});
+    CHECK( t.obstacles()[0].coin_.is_collected() == false );
+
+    // coin isn't collected
+    t.bird().center_ = ge211::Position {50, 50};
     m.update();
     CHECK( m.get_score() == 0 );
-    CHECK( m.coin_alive_ );
+    CHECK( t.obstacles()[0].coin_.is_collected() == false );
+    // check that everything updated correctly
+    CHECK( t.bird().center_ == ge211::Position {50, 60});
+    CHECK( t.obstacles()[0].top_pipe().bottom_right() == ge211::Position {110, 100});
+    CHECK( t.obstacles()[0].bottom_pipe().top_right() == ge211::Position {110, 500});
+    CHECK( t.obstacles()[0].coin_.center_ == ge211::Position{100, 300});
+    CHECK( t.obstacles().size() == 2 );
 
-    m.bird_ = ge211::Position {100, 100};
+    // coin is collected
+    t.bird().center_ = ge211::Position {83, 283};
     m.update();
     CHECK( m.get_score() == 1 );
-    CHECK_FALSE( m.coin_alive_ );
-}
+    CHECK( t.obstacles()[0].coin_.is_collected() == true );
+    // check that everything updated correctly
+    CHECK( t.bird().center_ == ge211::Position {83, 293});
+    CHECK( t.obstacles()[0].top_pipe().bottom_right() == ge211::Position {100, 100});
+    CHECK( t.obstacles()[0].bottom_pipe().top_right() == ge211::Position {100, 500});
+    CHECK( t.obstacles()[0].coin_.center_ == ge211::Position{90, 300});
+    CHECK( t.obstacles().size() == 2 );
 
+    // score does not change when bird hits coin and obstacle.has_coin_ is false
+    t.obstacles().clear();
+    Obstacle new_ob2(m.geometry_, 250, 150, false);
+    new_ob2.set_position(500);
+    t.obstacles().push_back(new_ob2);
+
+    CHECK( m.get_score() == 1 );
+    CHECK( t.obstacles().size() == 1 );
+    // check coin has correct position
+    CHECK( t.obstacles()[0].coin_.center_ == ge211::Position{510, 400});
+
+    t.bird().center_ = ge211::Position {500, 390};
+    m.update();
+    CHECK( m.get_score() == 1 );
+    // check that everything updated correctly
+    CHECK( t.bird().center_ == ge211::Position {500, 400});
+    CHECK( t.obstacles()[0].top_pipe().top_right() == ge211::Position {510, 0});
+    CHECK( t.obstacles()[0].bottom_pipe().top_left() == ge211::Position {490, 550});
+    CHECK( t.obstacles().size() == 2 );
+}
+/*
 TEST_CASE("round stops when bird dies")
 {
     Model m;
@@ -91,3 +149,5 @@ TEST_CASE("updates and maintains high score")
     m.update();
     CHECK( m.get_high_score() == 5 );
 }
+*/
+// test if obstacles are removed and added to obstacles_ vector correctly

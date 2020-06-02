@@ -38,8 +38,8 @@ public:
     ///
 
     //explicit Model(Geometry const& geometry = Geometry(), ge211::Random& my_rng = ge211::Abstract_game::get_random());
-    //explicit Model(Geometry const& geometry, ge211::Random& my_rng);
-    explicit Model(Geometry const& geometry = Geometry());
+    explicit Model(Geometry const& geometry, ge211::Random& my_rng);
+    //explicit Model(Geometry const& geometry = Geometry());
 
     ///
     /// PUBLIC DATA MEMBERS
@@ -47,6 +47,9 @@ public:
 
     // The geometry parameters of the model
     Geometry const geometry_;
+
+    // For testing in model_test
+    friend struct Test_access;
 
     ///
     /// PUBLIC FUNCTIONS
@@ -78,6 +81,9 @@ public:
 
     // Returns the vector of existing obstacles
     std::vector<Obstacle> obstacles() const;
+
+    // Random object used to generate obstacle pipe heights and determine if an obstacle has a coin
+    ge211::Random& random_;
 
 private:
     ///
