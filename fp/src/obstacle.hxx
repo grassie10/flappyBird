@@ -21,6 +21,9 @@ class Obstacle
     // Whether there will be a coin in the gap
     bool has_coin_;
 
+    // Whether this obstacle has been passed by the bird
+    bool passed_;
+
     // Width of the pipes in the obstacle
     int width_;
 
@@ -65,6 +68,12 @@ public:
 
     // Returns has_coin_
     bool has_coin() const;
+
+    // Returns passed_
+    bool is_passed() const;
+
+    // Sets passed_ equal to true when the bird passes the obstacle
+    void pass();
 
     // Returns coin.
     // PRECONDITION: has_coin_ is true
