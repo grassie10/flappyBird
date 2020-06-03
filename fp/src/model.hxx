@@ -37,9 +37,7 @@ public:
     /// CONSTRUCTOR
     ///
 
-    //explicit Model(Geometry const& geometry = Geometry(), ge211::Random& my_rng = ge211::Abstract_game::get_random());
     explicit Model(Geometry const& geometry, ge211::Random& my_rng);
-    //explicit Model(Geometry const& geometry = Geometry());
 
     ///
     /// PUBLIC DATA MEMBERS
@@ -78,6 +76,9 @@ public:
 
     // Returns the bird
     Bird bird() const;
+
+    // Gives the bird a vertical boost
+    void boost_bird();
 
     // Returns the vector of existing obstacles
     std::vector<Obstacle> obstacles() const;

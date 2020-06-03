@@ -11,7 +11,7 @@ void Controller::on_key(ge211::Key key)
         if (model_.game_end()) {
             model_.start();
         } else {
-            model_.bird().boost_vertical(model_.geometry_.bird_boost);
+            model_.boost_bird();
         }
     }
 }

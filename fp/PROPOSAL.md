@@ -24,7 +24,8 @@ the obstacles, then it dies and the game ends. The player can press the space ba
 
 1. The bird initially starts at the center of the left side of the screen.
 2. The game starts when the player presses the space bar.
-3. The bird automatically moves from left to right at a constant horizontal velocity.
+3. The bird can only move up and down while the obstacles and coins move from right to left at a constant horizontal 
+velocity.
 4. The bird flaps once (moves upward by one constant amount) when the player presses the space bar.
 5. Otherwise, the bird falls at a constant velocity.
 6. Vertical pipes/obstacles have randomly generated gaps of randomly generated sizes (that must be larger than the bird).
@@ -34,7 +35,7 @@ round ends.
 9. If the bird passes through one pipe, then the player gains one point.
 10. Coins may be randomly placed in the center of some pipes' gaps such that if the bird touches the coin, then the coin 
 disappears and the player gains an extra point.
-11. After the game is over, the player can press enter to replay.
+11. After the game is over, the player can press space to replay.
 12. The game will keep track of the high score, and display it after a round ends.
 
 ## Open questions

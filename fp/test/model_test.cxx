@@ -23,52 +23,87 @@ struct Test_access
         return m_.obstacles_;
     }
 };
-/*
 TEST_CASE("bird hits top")
 {
-    Model m;
-    m.bird_alive_ = true;
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
+    t.bird().live_ = true;
 
-    m.bird_.y = 15;
+    t.bird().center_.y = geometry.scene_dims.height/2;
     m.update();
-    CHECK( m.bird_alive_ );
-    m.bird_.y = 0;
+    CHECK( t.bird().live_);
+    t.bird().center_.y = - t.bird().velocity_.height*2;
     m.update();
-    CHECK_FALSE ( m.bird_alive_ );
+    CHECK_FALSE ( t.bird().live_);
 
 }
 
 TEST_CASE("bird hits ground")
 {
-    Model m;
-    m.bird_alive_ = true;
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
+    t.bird().live_ = true;
 
-    m.bird_.y = m.scene_dims.y - 15;
+    t.bird().center_.y = geometry.scene_dims.height/3;
     m.update();
-    CHECK( m.bird_alive_ );
-    m.bird_.y = m.scene_dims.y;
+    CHECK( t.bird().live_);
+    t.bird().center_.y = geometry.scene_dims.height + 5;
     m.update();
-    CHECK_FALSE ( m.bird_alive_ );
+    CHECK_FALSE ( t.bird().live_);
 }
 
 TEST_CASE("bird hits obstacle")
 {
-    Model m;
-    m.bird_alive_ = true;
-    m.obstacles_.clear();
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
+    t.bird().live_ = true;
+    t.obstacles().clear();
 
-    struct Obstacle o;
-    o.top_pipe = { 100, 0, 100, 300};
-    o.bottom_pipe = {100, 400, 100, 100};
+    Obstacle new_ob(m.geometry_, 100, 200, true);
+    new_ob.set_position(100);
+    t.obstacles().push_back(new_ob);
 
-    m.bird_ = ge211::Position {50, 50};
+    //hits bottom obstacle
+    t.bird().center_ = ge211::Position {100, 495};
     m.update();
-    CHECK( m.bird_alive_ );
-    m.bird_ = ge211::Position {150, 50};
+    CHECK_FALSE ( t.bird().live_);
+
+    t.bird().live_ = true;
+    //hits top obstacle
+    t.bird().center_ = ge211::Position {100, 75};
     m.update();
-    CHECK_FALSE( m.bird_alive_ );
+    CHECK_FALSE ( t.bird().live_);
+
+    // check nothing happens when model updates if bird is dead
+    CHECK( t.bird().center_ == ge211::Position {100, 75} );
+    CHECK( t.obstacles()[0].bottom_pipe().top_right() == ge211::Position {120, 500} );
+    m.update();
+    CHECK( t.bird().center_ == ge211::Position {100, 75} );
+    CHECK( t.obstacles()[0].bottom_pipe().top_right() == ge211::Position {120, 500} );
 }
-*/
+
+TEST_CASE("bird passes obstacle") {
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
+    t.bird().live_ = true;
+
+    Obstacle new_ob(m.geometry_, 100, 200, false);
+    new_ob.set_position(100);
+    t.obstacles().push_back(new_ob);
+
+    t.bird().center_ = ge211::Position {110, 280};
+    m.update();
+    CHECK( t.bird().live_);
+}
+
 TEST_CASE("collect coin")
 {
     Random_test_access rand;
@@ -85,13 +120,13 @@ TEST_CASE("collect coin")
     CHECK( t.obstacles().size() == 1 );
     // check coin has correct position
     CHECK( t.obstacles()[0].coin.center_ == ge211::Position{110, 300});
-    CHECK( t.obstacles()[0].coin.is_collected() == false );
+    CHECK_FALSE( t.obstacles()[0].coin.is_collected() );
 
     // coin isn't collected
     t.bird().center_ = ge211::Position {50, 50};
     m.update();
     CHECK( m.get_score() == 0 );
-    CHECK( t.obstacles()[0].coin.is_collected() == false );
+    CHECK_FALSE( t.obstacles()[0].coin.is_collected() );
     // check that everything updated correctly
     CHECK( t.bird().center_ == ge211::Position {50, 60});
     CHECK( t.obstacles()[0].top_pipe().bottom_right() == ge211::Position {110, 100});
@@ -103,7 +138,7 @@ TEST_CASE("collect coin")
     t.bird().center_ = ge211::Position {83, 283};
     m.update();
     CHECK( m.get_score() == 1 );
-    CHECK( t.obstacles()[0].coin.is_collected() == true );
+    CHECK( t.obstacles()[0].coin.is_collected() );
     // check that everything updated correctly
     CHECK( t.bird().center_ == ge211::Position {83, 293});
     CHECK( t.obstacles()[0].top_pipe().bottom_right() == ge211::Position {100, 100});
@@ -131,29 +166,139 @@ TEST_CASE("collect coin")
     CHECK( t.obstacles()[0].bottom_pipe().top_left() == ge211::Position {490, 550});
     CHECK( t.obstacles().size() == 2 );
 }
-/*
-TEST_CASE("round stops when bird dies")
-{
-    Model m;
-    m.bird_alive_ = true;
-
-    CHECK_FALSE( m.game_end );
-    m.bird_alive_ = false;
-    CHECK( m.game_end );
-}
 
 TEST_CASE("updates and maintains high score")
 {
-    Model m;
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
 
-    m.score = 5;
-    m.bird_alive_ = false;
-    m.update();
-    CHECK( m.get_high_score() == 5 );
+    // Round 1: get 2 points
+    m.start();
+    t.obstacles().clear();
+    Obstacle new_ob(m.geometry_, 100, 100, true);
+    new_ob.set_position(100);
+    t.obstacles().push_back(new_ob);
 
-    m.score = 3;
+    CHECK( m.get_score() == 0 );
+    CHECK( m.get_high_score() == 0 );
+    CHECK( t.obstacles()[0].coin.center_ == ge211::Position{110, 350});
+    CHECK_FALSE( t.obstacles()[0].coin.is_collected() );
+
+    // bird hits coin
+    t.bird().center_ = ge211::Position {100, 331};
     m.update();
-    CHECK( m.get_high_score() == 5 );
+    CHECK( m.get_score() == 1 );
+    CHECK( m.get_high_score() == 0 );
+    CHECK( t.obstacles()[0].coin.is_collected() );
+    CHECK( t.obstacles()[0].bottom_pipe().bottom_left() == ge211::Position {90, 700});
+
+    m.update();
+    CHECK( m.get_score() == 1 );
+    CHECK( m.get_high_score() == 0 );
+    CHECK( t.obstacles()[0].coin.is_collected() );
+    CHECK( t.bird().center_ == ge211::Position {100, 351} );
+    CHECK( t.obstacles()[0].bottom_pipe().top_right() == ge211::Position {100, 600});
+    CHECK_FALSE( m.game_end() );
+
+    // bird passes obstacle
+    m.update();
+    CHECK( m.get_score() == 2 );
+    CHECK( m.get_high_score() == 0 );
+    CHECK( t.bird().center_ == ge211::Position {100, 361} );
+    CHECK( t.obstacles()[0].bottom_pipe().top_right() == ge211::Position {90, 600});
+    CHECK_FALSE( m.game_end() );
+
+    // bird hits bottom of screen and dies
+    t.bird().center_ = ge211::Position {100, 700};
+    m.update();
+    CHECK( m.get_score() == 2 );
+    CHECK( m.get_high_score() == 2 );
+    CHECK( m.game_end() );
+
+    // Round 2: Get 1 point
+    m.start();
+    t.obstacles().clear();
+    new_ob = Obstacle(m.geometry_, 200, 200, true);
+    new_ob.set_position(300);
+    t.obstacles().push_back(new_ob);
+
+    CHECK( m.get_score() == 0 );
+    CHECK( m.get_high_score() == 2 );
+    CHECK( t.obstacles()[0].coin.center_ == ge211::Position{310, 350});
+    CHECK_FALSE( t.obstacles()[0].coin.is_collected() );
+
+    // bird passes obstacle
+    t.bird().center_ = ge211::Position {318, 400};
+    m.update();
+    CHECK( m.get_score() == 1 );
+    CHECK( m.get_high_score() == 2 );
+    CHECK_FALSE( t.obstacles()[0].coin.is_collected() );
+
+    // bird hits bottom of screen and dies
+    t.bird().center_ = ge211::Position {800, 700};
+    m.update();
+    CHECK( m.get_score() == 1 );
+    CHECK( m.get_high_score() == 2 );   // high score doesn't change
+    CHECK( m.game_end() );
+
+    // Round 3: Get 3 points
+    m.start();
+    t.obstacles().clear();
+    new_ob = Obstacle(m.geometry_, 100, 100, false);
+    new_ob.set_position(300);
+    t.obstacles().push_back(new_ob);
+    new_ob = Obstacle(m.geometry_, 100, 100, false);
+    new_ob.set_position(400);
+    t.obstacles().push_back(new_ob);
+    new_ob = Obstacle(m.geometry_, 100, 100, false);
+    new_ob.set_position(500);
+    t.obstacles().push_back(new_ob);
+
+    CHECK( m.get_score() == 0 );
+    CHECK( m.get_high_score() == 2 );
+
+    // bird passes first obstacle
+    t.bird().center_ = ge211::Position {320, 400};
+    m.update();
+    CHECK( m.get_score() == 1 );
+    CHECK( m.get_high_score() == 2 );
+
+    // bird passes second obstacle
+    t.bird().center_ = ge211::Position {410, 400};
+    m.update();
+    CHECK( m.get_score() == 2 );
+    CHECK( m.get_high_score() == 2 );
+
+    // bird passes third obstacle
+    t.bird().center_ = ge211::Position {500, 400};
+    m.update();
+    CHECK( m.get_score() == 3 );
+    CHECK( m.get_high_score() == 2 );
+
+    // bird hits obstacle and dies
+    t.bird().center_ = ge211::Position {456, 595};
+    m.update();
+    CHECK( m.get_score() == 3 );
+    CHECK( m.get_high_score() == 3 );
+    CHECK( m.game_end() );
 }
-*/
+
 // test if obstacles are removed and added to obstacles_ vector correctly
+TEST_CASE("obstacles removed and added to obstacles_ vector correctly")
+{
+    // NOT COMPLETED
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
+
+    // Round 1: get 2 points
+    m.start();
+    t.obstacles().clear();
+    Obstacle new_ob(m.geometry_, 100, 100, true);
+    new_ob.set_position(100);
+    t.obstacles().push_back(new_ob);
+}
+// check boosting the bird vertically

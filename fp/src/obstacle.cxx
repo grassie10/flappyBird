@@ -5,6 +5,7 @@
 Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry)
             : width_ (geometry.obstacle_width)
             , velocity_ (geometry.background_velocity)
+            , passed_ (false)
 {
     // Make sure that the gap between the pipes is big enough for the bird
     int diff = 0;
@@ -35,6 +36,7 @@ Obstacle::Obstacle(Geometry const& geometry, int top_height, int bottom_height, 
         : width_ (geometry.obstacle_width)
         , velocity_ (geometry.background_velocity)
         , has_coin_ (with_coin)
+        , passed_ (false)
 {
     top_pipe_ = Column::from_top_left({geometry.scene_dims.width, 0}, {width_, top_height});
     bottom_pipe_ = Column::from_bottom_left({geometry.scene_dims.width, geometry.scene_dims.height},
@@ -59,6 +61,18 @@ Column Obstacle::bottom_pipe() const
 bool Obstacle::has_coin() const
 {
     return has_coin_;
+}
+
+// Returns passed_
+bool Obstacle::is_passed() const
+{
+    return passed_;
+}
+
+// Sets passed_ equal to true when the bird passes the obstacle
+void Obstacle::pass()
+{
+    passed_ = true;
 }
 
 // Returns coin_.

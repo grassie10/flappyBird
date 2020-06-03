@@ -42,7 +42,8 @@ void Model::update()
             }
 
             // check if the bird passes an obstacle
-            if (next_bird.pass_obstacle(new_o)) {
+            if (next_bird.pass_obstacle(new_o) && !new_o.is_passed()) {
+                o.pass();
                 score_ += 1;
             }
 
@@ -98,9 +99,12 @@ void Model::start()
     score_ = 0;
     game_end_ = false;
 
+    // put bird in starting position
+    //bird_.center_ = Bird::start_pos(geometry_);
+    bird_.center_ = ge211::Position {geometry_.side_margin, geometry_.scene_dims.height/2};
+
     // clear and reinitialize obstacles_
     obstacles_.clear();
-    //ge211::Random& my_rng = ge211::Abstract_game::get_random();
     Obstacle new_obstacle(random_, geometry_);
     new_obstacle.set_position(geometry_.scene_dims.width - geometry_.obstacle_width);
     obstacles_.push_back(new_obstacle);
@@ -116,6 +120,12 @@ bool Model::game_end()
 Bird Model::bird() const
 {
     return bird_;
+}
+
+// Gives the bird a vertical boost
+void Model::boost_bird()
+{
+    bird_.boost_vertical(geometry_.bird_boost);
 }
 
 // Returns the vector of existing obstacles
