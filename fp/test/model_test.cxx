@@ -23,52 +23,79 @@ struct Test_access
         return m_.obstacles_;
     }
 };
-/*
 TEST_CASE("bird hits top")
 {
-    Model m;
-    m.bird_alive_ = true;
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
+    t.bird().live_ = true;
 
-    m.bird_.y = 15;
+    t.bird().center_.y = geometry.scene_dims.height/2;
     m.update();
-    CHECK( m.bird_alive_ );
-    m.bird_.y = 0;
+    CHECK( t.bird().live_);
+    t.bird().center_.y = - t.bird().velocity_.height*2;
     m.update();
-    CHECK_FALSE ( m.bird_alive_ );
+    CHECK_FALSE ( t.bird().live_);
 
 }
 
 TEST_CASE("bird hits ground")
 {
-    Model m;
-    m.bird_alive_ = true;
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
+    t.bird().live_ = true;
 
-    m.bird_.y = m.scene_dims.y - 15;
+    t.bird().center_.y = geometry.scene_dims.height/3;
     m.update();
-    CHECK( m.bird_alive_ );
-    m.bird_.y = m.scene_dims.y;
+    CHECK( t.bird().live_);
+    t.bird().center_.y = geometry.scene_dims.height + 5;
     m.update();
-    CHECK_FALSE ( m.bird_alive_ );
+    CHECK_FALSE ( t.bird().live_);
 }
 
 TEST_CASE("bird hits obstacle")
 {
-    Model m;
-    m.bird_alive_ = true;
-    m.obstacles_.clear();
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
+    t.bird().live_ = true;
 
-    struct Obstacle o;
-    o.top_pipe = { 100, 0, 100, 300};
-    o.bottom_pipe = {100, 400, 100, 100};
+    Obstacle new_ob(m.geometry_, 100, 200, true);
+    new_ob.set_position(100);
+    t.obstacles().push_back(new_ob);
 
-    m.bird_ = ge211::Position {50, 50};
+    //hits bottom obstacle
+    t.bird().center_ = ge211::Position {100, 495};
     m.update();
-    CHECK( m.bird_alive_ );
-    m.bird_ = ge211::Position {150, 50};
+    CHECK_FALSE ( t.bird().live_);
+
+    t.bird().live_ = true;
+    //hits top obstacle
+    t.bird().center_ = ge211::Position {100, 75};
     m.update();
-    CHECK_FALSE( m.bird_alive_ );
+    CHECK_FALSE ( t.bird().live_);
 }
-*/
+
+TEST_CASE("bird passes obstacle") {
+    Random_test_access rand;
+    Geometry geometry;
+    Model m(geometry, rand.rnd);
+    Test_access t{m};
+    t.bird().live_ = true;
+
+    Obstacle new_ob(m.geometry_, 100, 200, false);
+    new_ob.set_position(100);
+    t.obstacles().push_back(new_ob);
+
+    t.bird().center_ = ge211::Position {110, 280};
+    m.update();
+    CHECK( t.bird().live_);
+}
+
 TEST_CASE("collect coin")
 {
     Random_test_access rand;
