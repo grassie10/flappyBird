@@ -48,10 +48,10 @@ void Model::update()
 
             // separately check if the bird hits the coin
             if (o.has_coin()) {
-                Coin next_coin = new_o.coin();
+                Coin next_coin = new_o.get_coin();
                 if (!next_coin.is_collected() && next_bird.hits_coin(next_coin)) {
                     score_ += 1;
-                    o.coin_.collect();
+                    o.coin.collect();
                 }
             }
 

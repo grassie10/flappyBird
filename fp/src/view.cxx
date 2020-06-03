@@ -25,8 +25,8 @@ void View::draw(ge211::Sprite_set& set)
         set.add_sprite(bottom_pipe_sprite, obstacle.bottom_pipe().top_left(), 1);
 
         //add coin sprite, if applicable
-        if (obstacle.has_coin() && !obstacle.coin().is_collected()) {
-            set.add_sprite(coin_sprite_, obstacle.coin().top_left(), 1);
+        if (obstacle.has_coin() && !obstacle.get_coin().is_collected()) {
+            set.add_sprite(coin_sprite_, obstacle.get_coin().top_left(), 1);
         }
     }
 

@@ -1,6 +1,10 @@
 #include "coin.hxx"
 #include "geometry.hxx"
 
+Coin::Coin()
+        : center_ {0, 0}
+{}
+
 Coin::Coin(ge211::Position center, Geometry const& geometry)
         : center_ (center)
         , radius_ (geometry.coin_radius)
