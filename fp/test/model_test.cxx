@@ -27,9 +27,18 @@ TEST_CASE("bird hits top")
 {
     Random_test_access rand;
     Geometry geometry;
+    geometry.bird_radius = 5;
+    geometry.bird_velocity0 = ge211::Dimensions {0, 10};
+    geometry.obstacle_width = 20;
+    geometry.obstacle_spacing = 20;
+    geometry.coin_radius = 5;
     Model m(geometry, rand.rnd);
     Test_access t{m};
     t.bird().live_ = true;
+
+    // FUNCTIONAL REQUIREMENT 1: Bird's initial position is at the center of the left side of the screen
+    // NOTE: We defined a side margin so that the bird is positioned a little inward from the left side of the screen.
+    CHECK( t.bird().center_ == ge211::Position {m.geometry_.side_margin, m.geometry_.scene_dims.height/2});
 
     t.bird().center_.y = geometry.scene_dims.height/2;
     m.update();
@@ -37,13 +46,18 @@ TEST_CASE("bird hits top")
     t.bird().center_.y = - t.bird().velocity_.height*2;
     m.update();
     CHECK_FALSE ( t.bird().live_);
-
+    CHECK( m.get_score() == 0 );
 }
 
 TEST_CASE("bird hits ground")
 {
     Random_test_access rand;
     Geometry geometry;
+    geometry.bird_radius = 5;
+    geometry.bird_velocity0 = ge211::Dimensions {0, 10};
+    geometry.obstacle_width = 20;
+    geometry.obstacle_spacing = 20;
+    geometry.coin_radius = 5;
     Model m(geometry, rand.rnd);
     Test_access t{m};
     t.bird().live_ = true;
@@ -54,12 +68,18 @@ TEST_CASE("bird hits ground")
     t.bird().center_.y = geometry.scene_dims.height + 5;
     m.update();
     CHECK_FALSE ( t.bird().live_);
+    CHECK( m.get_score() == 0 );
 }
 
 TEST_CASE("bird hits obstacle")
 {
     Random_test_access rand;
     Geometry geometry;
+    geometry.bird_radius = 5;
+    geometry.bird_velocity0 = ge211::Dimensions {0, 10};
+    geometry.obstacle_width = 20;
+    geometry.obstacle_spacing = 20;
+    geometry.coin_radius = 5;
     Model m(geometry, rand.rnd);
     Test_access t{m};
     t.bird().live_ = true;
@@ -73,12 +93,14 @@ TEST_CASE("bird hits obstacle")
     t.bird().center_ = ge211::Position {100, 495};
     m.update();
     CHECK_FALSE ( t.bird().live_);
+    CHECK( m.get_score() == 0 );
 
     t.bird().live_ = true;
     //hits top obstacle
     t.bird().center_ = ge211::Position {100, 75};
     m.update();
     CHECK_FALSE ( t.bird().live_);
+    CHECK( m.get_score() == 0 );
 
     // check nothing happens when model updates if bird is dead
     CHECK( t.bird().center_ == ge211::Position {100, 75} );
@@ -86,11 +108,17 @@ TEST_CASE("bird hits obstacle")
     m.update();
     CHECK( t.bird().center_ == ge211::Position {100, 75} );
     CHECK( t.obstacles()[0].bottom_pipe().top_right() == ge211::Position {120, 500} );
+    CHECK( m.get_score() == 0 );
 }
 
 TEST_CASE("bird passes obstacle") {
     Random_test_access rand;
     Geometry geometry;
+    geometry.bird_radius = 5;
+    geometry.bird_velocity0 = ge211::Dimensions {0, 10};
+    geometry.obstacle_width = 20;
+    geometry.obstacle_spacing = 20;
+    geometry.coin_radius = 5;
     Model m(geometry, rand.rnd);
     Test_access t{m};
     t.bird().live_ = true;
@@ -99,15 +127,22 @@ TEST_CASE("bird passes obstacle") {
     new_ob.set_position(100);
     t.obstacles().push_back(new_ob);
 
-    t.bird().center_ = ge211::Position {110, 280};
+    CHECK( m.get_score() == 0 );
+    t.bird().center_ = ge211::Position {116, 280};
     m.update();
     CHECK( t.bird().live_);
+    CHECK( m.get_score() == 1 );
 }
 
 TEST_CASE("collect coin")
 {
     Random_test_access rand;
     Geometry geometry;
+    geometry.bird_radius = 5;
+    geometry.bird_velocity0 = ge211::Dimensions {0, 10};
+    geometry.obstacle_width = 20;
+    geometry.obstacle_spacing = 20;
+    geometry.coin_radius = 5;
     Model m(geometry, rand.rnd);
     Test_access t{m};
     m.start();
@@ -171,6 +206,11 @@ TEST_CASE("updates and maintains high score")
 {
     Random_test_access rand;
     Geometry geometry;
+    geometry.bird_radius = 5;
+    geometry.bird_velocity0 = ge211::Dimensions {0, 10};
+    geometry.obstacle_width = 20;
+    geometry.obstacle_spacing = 20;
+    geometry.coin_radius = 5;
     Model m(geometry, rand.rnd);
     Test_access t{m};
 
@@ -284,21 +324,3 @@ TEST_CASE("updates and maintains high score")
     CHECK( m.get_high_score() == 3 );
     CHECK( m.game_end() );
 }
-
-// test if obstacles are removed and added to obstacles_ vector correctly
-TEST_CASE("obstacles removed and added to obstacles_ vector correctly")
-{
-    // NOT COMPLETED
-    Random_test_access rand;
-    Geometry geometry;
-    Model m(geometry, rand.rnd);
-    Test_access t{m};
-
-    // Round 1: get 2 points
-    m.start();
-    t.obstacles().clear();
-    Obstacle new_ob(m.geometry_, 100, 100, true);
-    new_ob.set_position(100);
-    t.obstacles().push_back(new_ob);
-}
-// check boosting the bird vertically

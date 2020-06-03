@@ -11,7 +11,7 @@ Obstacle::Obstacle(ge211::Random& rng, Geometry const& geometry)
     int diff = 0;
     int top_height;
     int bottom_height;
-    while (diff < (2*geometry.bird_radius) + 20) {
+    while (diff < (2*geometry.bird_radius) + 150) {
         top_height = rng.between(1, geometry.scene_dims.height);
         bottom_height = rng.between(1, geometry.scene_dims.height - top_height);
         diff = (geometry.scene_dims.height - bottom_height) - top_height;

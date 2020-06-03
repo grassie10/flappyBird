@@ -10,9 +10,8 @@ void Controller::on_key(ge211::Key key)
     if (key == ge211::Key::code(' ')) {
         if (model_.game_end()) {
             model_.start();
-        } else {
-            model_.boost_bird();
         }
+        model_.boost_bird();
     }
 }
 
@@ -23,6 +22,7 @@ void Controller::on_frame(double dt)
 
 void Controller::draw(ge211::Sprite_set& sprites)
 {
+    view_.update_sprites();
     view_.draw(sprites);
 }
 

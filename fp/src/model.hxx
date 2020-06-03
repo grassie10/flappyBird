@@ -16,6 +16,9 @@ class Model
     // The high score maintained across all games
     static int high_score;
 
+    // Whether any round has been played yet
+    static bool first_start;
+
     ///
     /// PRIVATE DATA MEMBERS
     ///

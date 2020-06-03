@@ -5,6 +5,7 @@
 #include "obstacle.hxx"
 
 int Model::high_score = 0;
+bool Model::first_start = false;
 
 Model::Model(Geometry const& geometry, ge211::Random& my_rng)
     : geometry_(geometry)
@@ -100,14 +101,17 @@ void Model::start()
     game_end_ = false;
 
     // put bird in starting position
-    //bird_.center_ = Bird::start_pos(geometry_);
     bird_.center_ = ge211::Position {geometry_.side_margin, geometry_.scene_dims.height/2};
 
     // clear and reinitialize obstacles_
-    obstacles_.clear();
-    Obstacle new_obstacle(random_, geometry_);
-    new_obstacle.set_position(geometry_.scene_dims.width - geometry_.obstacle_width);
-    obstacles_.push_back(new_obstacle);
+    if (first_start) {
+        obstacles_.clear();
+        Obstacle new_obstacle(random_, geometry_);
+        new_obstacle.set_position(geometry_.scene_dims.width - geometry_.obstacle_width);
+        obstacles_.push_back(new_obstacle);
+    }
+
+    first_start = true;
 }
 
 // Returns game_end_
