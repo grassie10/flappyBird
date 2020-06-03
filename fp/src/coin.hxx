@@ -25,6 +25,9 @@ public:
     /// CONSTRUCTOR
     ///
 
+    // Default constructor
+    Coin();
+
     // Constructs a new coin that is centered in the gap between the two pipes in an Obstacle
     Coin(ge211::Position center, Geometry const&);
 

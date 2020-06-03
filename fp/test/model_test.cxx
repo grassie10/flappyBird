@@ -84,31 +84,31 @@ TEST_CASE("collect coin")
     CHECK( m.get_score() == 0 );
     CHECK( t.obstacles().size() == 1 );
     // check coin has correct position
-    CHECK( t.obstacles()[0].coin_.center_ == ge211::Position{110, 300});
-    CHECK( t.obstacles()[0].coin_.is_collected() == false );
+    CHECK( t.obstacles()[0].coin.center_ == ge211::Position{110, 300});
+    CHECK( t.obstacles()[0].coin.is_collected() == false );
 
     // coin isn't collected
     t.bird().center_ = ge211::Position {50, 50};
     m.update();
     CHECK( m.get_score() == 0 );
-    CHECK( t.obstacles()[0].coin_.is_collected() == false );
+    CHECK( t.obstacles()[0].coin.is_collected() == false );
     // check that everything updated correctly
     CHECK( t.bird().center_ == ge211::Position {50, 60});
     CHECK( t.obstacles()[0].top_pipe().bottom_right() == ge211::Position {110, 100});
     CHECK( t.obstacles()[0].bottom_pipe().top_right() == ge211::Position {110, 500});
-    CHECK( t.obstacles()[0].coin_.center_ == ge211::Position{100, 300});
+    CHECK( t.obstacles()[0].coin.center_ == ge211::Position{100, 300});
     CHECK( t.obstacles().size() == 2 );
 
     // coin is collected
     t.bird().center_ = ge211::Position {83, 283};
     m.update();
     CHECK( m.get_score() == 1 );
-    CHECK( t.obstacles()[0].coin_.is_collected() == true );
+    CHECK( t.obstacles()[0].coin.is_collected() == true );
     // check that everything updated correctly
     CHECK( t.bird().center_ == ge211::Position {83, 293});
     CHECK( t.obstacles()[0].top_pipe().bottom_right() == ge211::Position {100, 100});
     CHECK( t.obstacles()[0].bottom_pipe().top_right() == ge211::Position {100, 500});
-    CHECK( t.obstacles()[0].coin_.center_ == ge211::Position{90, 300});
+    CHECK( t.obstacles()[0].coin.center_ == ge211::Position{90, 300});
     CHECK( t.obstacles().size() == 2 );
 
     // score does not change when bird hits coin and obstacle.has_coin_ is false
@@ -120,7 +120,7 @@ TEST_CASE("collect coin")
     CHECK( m.get_score() == 1 );
     CHECK( t.obstacles().size() == 1 );
     // check coin has correct position
-    CHECK( t.obstacles()[0].coin_.center_ == ge211::Position{510, 400});
+    CHECK( t.obstacles()[0].coin.center_ == ge211::Position{510, 400});
 
     t.bird().center_ = ge211::Position {500, 390};
     m.update();

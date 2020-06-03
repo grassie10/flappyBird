@@ -51,7 +51,7 @@ public:
     ///
 
     // Coin object in gap between top and bottom pipes. Only accessed if has_coin_ is true
-    Coin coin_;
+    Coin coin;
 
     ///
     /// MEMBER FUNCTIONS
@@ -66,9 +66,9 @@ public:
     // Returns has_coin_
     bool has_coin() const;
 
-    // Returns coin_.
+    // Returns coin.
     // PRECONDITION: has_coin_ is true
-    Coin coin() const;
+    Coin get_coin() const;
 
     // Returns width_
     int width() const;
